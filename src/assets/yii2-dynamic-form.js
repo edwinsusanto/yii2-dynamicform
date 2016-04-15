@@ -347,33 +347,6 @@
             });
         }
 
-        // "kartik-v/yii2-widget-datecontrol"
-        var $hasDateControl = $(widgetOptionsRoot.widgetItem).find('[data-krajee-datecontrol]');
-        if ($hasDateControl.length > 0) {
-            $hasDateControl.each(function() {
-                var id = $(this).attr('id');
-                var dcElementOptions = eval($(this).attr('data-krajee-datecontrol'));
-                //if (id.indexOf(dcElementOptions.idSave) < 0) {
-                    // initialize the NEW DateControl element
-                    var cdNewOptions = $.extend(true, {}, dcElementOptions);
-                    cdNewOptions.idSave = $(this).parent().next().attr('id');
-                    $(this).parent().kvDatepicker(eval($(this).attr('data-krajee-kvdatepicker')));
-                    $(this).removeAttr('value name data-krajee-datecontrol');
-                    $(this).datecontrol(cdNewOptions);
-
-                //}
-            });
-        }
-
-        // "kartik-v/yii2-widget-datepicker"
-        var $hasDatepicker = $(widgetOptionsRoot.widgetItem).find('[data-krajee-kvdatepicker]');
-        if ($hasDatepicker.length > 0) {
-            $hasDatepicker.each(function() {
-                $(this).parent().removeData().kvDatepicker('remove');
-                $(this).parent().kvDatepicker(eval($(this).attr('data-krajee-kvdatepicker')));
-            });
-        }
-
         // "kartik-v/yii2-widget-datepicker"
         var $hasDatepicker = $(widgetOptionsRoot.widgetItem).find('[data-krajee-datepicker]');
         if ($hasDatepicker.length > 0) {
@@ -463,7 +436,7 @@
             });
         }
 
-        // "kartik-v/yii2-widget-select2"
+       // "kartik-v/yii2-widget-select2"
         var $hasSelect2 = $(widgetOptionsRoot.widgetItem).find('[data-krajee-select2]');
         if ($hasSelect2.length > 0) {
             $hasSelect2.each(function() {
@@ -481,13 +454,14 @@
                     $(this).unbind();
                     _restoreKrajeeDepdrop($(this));
                 }
-
-                $.when($('#' + id).select2(configSelect2)).done(initSelect2Loading(id, '.select2-container--krajee'));
+                var s2LoadingFunc = typeof initSelect2Loading != 'undefined' ? initSelect2Loading : initS2Loading;
+                var s2OpenFunc = typeof initSelect2DropStyle != 'undefined' ? initSelect2Loading : initS2Loading;
+                $.when($('#' + id).select2(configSelect2)).done(s2LoadingFunc(id, '.select2-container--krajee'));
 
                 var kvClose = 'kv_close_' + id.replace(/\-/g, '_');
 
                 $('#' + id).on('select2:opening', function(ev) {
-                    initSelect2DropStyle(id, kvClose, ev);
+                    s2OpenFunc(id, kvClose, ev);
                 });
 
                 $('#' + id).on('select2:unselect', function() {
